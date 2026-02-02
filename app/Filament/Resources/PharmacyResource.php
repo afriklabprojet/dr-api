@@ -56,6 +56,7 @@ class PharmacyResource extends Resource
                             ->label('CNI / Pièce d\'Identité (PDF/Image)')
                             ->directory('pharmacy-licenses')
                             ->acceptedFileTypes(['application/pdf', 'image/*'])
+                            ->required()
                             ->openable()
                             ->columnSpanFull(),
                         Forms\Components\TextInput::make('owner_name')

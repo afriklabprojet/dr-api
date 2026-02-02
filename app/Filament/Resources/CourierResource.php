@@ -119,12 +119,14 @@ class CourierResource extends Resource
                             ->disk('private')
                             ->directory('courier-documents')
                             ->acceptedFileTypes(['application/pdf', 'image/*'])
+                            ->required()
                             ->maxSize(5120),
                         Forms\Components\FileUpload::make('id_card_back_document')
                             ->label('CNI (Verso)')
                             ->disk('private')
                             ->directory('courier-documents')
                             ->acceptedFileTypes(['application/pdf', 'image/*'])
+                            ->required()
                             ->maxSize(5120),
                         Forms\Components\FileUpload::make('selfie_document')
                             ->label('Selfie')
