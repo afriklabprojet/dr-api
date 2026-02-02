@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api\Pharmacy;
 
 use App\Http\Controllers\Controller;
 use App\Models\Prescription;
+use App\Http\Resources\PrescriptionResource;
 use Illuminate\Http\Request;
 
 class PrescriptionController extends Controller
@@ -20,7 +21,7 @@ class PrescriptionController extends Controller
 
         return response()->json([
             'status' => 'success',
-            'data' => $prescriptions
+            'data' => PrescriptionResource::collection($prescriptions)
         ]);
     }
 
@@ -40,7 +41,7 @@ class PrescriptionController extends Controller
 
         return response()->json([
             'status' => 'success',
-            'data' => $prescription
+            'data' => new PrescriptionResource($prescription)
         ]);
     }
 
@@ -94,7 +95,7 @@ class PrescriptionController extends Controller
         return response()->json([
             'status' => 'success',
             'message' => 'Prescription status updated successfully',
-            'data' => $prescription
+            'data' => new PrescriptionResource($prescription)
         ]);
     }
 }

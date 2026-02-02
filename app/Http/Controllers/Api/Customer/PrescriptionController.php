@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api\Customer;
 
 use App\Http\Controllers\Controller;
 use App\Models\Prescription;
+use App\Http\Resources\PrescriptionResource;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
@@ -18,36 +19,11 @@ class PrescriptionController extends Controller
         $prescriptions = $request->user()->prescriptions()
             ->with('order:id,reference,status') // Charger la commande associée
             ->latest()
-            ->get()
-            ->map(function ($prescription) {
-                $data = [
-                    'id' => $prescription->id,
-                    'status' => $prescription->status,
-                    'source' => $prescription->source ?? 'upload',
-                    'notes' => $prescription->notes,
-                    'images' => $prescription->images,
-                    'quote_amount' => $prescription->quote_amount,
-                    'pharmacy_notes' => $prescription->pharmacy_notes,
-                    'created_at' => $prescription->created_at,
-                    'validated_at' => $prescription->validated_at,
-                    'order_id' => $prescription->order_id,
-                ];
-                
-                // Ajouter les infos de la commande si elle existe
-                if ($prescription->order) {
-                    $data['order'] = [
-                        'id' => $prescription->order->id,
-                        'reference' => $prescription->order->reference,
-                        'status' => $prescription->order->status,
-                    ];
-                }
-                
-                return $data;
-            });
+            ->get();
 
         return response()->json([
             'success' => true,
-            'data' => $prescriptions,
+            'data' => PrescriptionResource::collection($prescriptions),
         ]);
     }
 
@@ -114,14 +90,7 @@ class PrescriptionController extends Controller
         return response()->json([
             'success' => true,
             'message' => 'Prescription uploaded successfully',
-            'data' => [
-                'id' => $prescription->id,
-                'status' => $prescription->status,
-                'source' => $prescription->source,
-                'images' => $prescription->images,
-                'notes' => $prescription->notes,
-                'created_at' => $prescription->created_at,
-            ],
+            'data' => new PrescriptionResource($prescription),
         ], 201);
     }
 
@@ -130,21 +99,11 @@ class PrescriptionController extends Controller
      */
     public function show(Request $request, $id)
     {
-        $prescription = $request->user()->prescriptions()->findOrFail($id);
+        $prescription = $request->user()->prescriptions()->with('order')->findOrFail($id);
 
         return response()->json([
             'success' => true,
-            'data' => [
-                'id' => $prescription->id,
-                'status' => $prescription->status,
-                'notes' => $prescription->notes,
-                'images' => $prescription->images,
-                'admin_notes' => $prescription->admin_notes,
-                'pharmacy_notes' => $prescription->pharmacy_notes,
-                'quote_amount' => $prescription->quote_amount,
-                'created_at' => $prescription->created_at,
-                'validated_at' => $prescription->validated_at,
-            ],
+            'data' => new PrescriptionResource($prescription),
         ]);
     }
 
@@ -188,7 +147,8 @@ class PrescriptionController extends Controller
             'customer_notes' => $prescription->notes,
             'pharmacy_notes' => $prescription->pharmacy_notes,
             'delivery_address' => $request->input('delivery_address', 'Retrait en pharmacie'), // Default or from request
-            'prescription_image' => is_array($prescription->images) ? ($prescription->images[0] ?? null) : $prescription->images,
+            // Use raw images method to get relative path, not the absolute URL from accessor
+            'prescription_image' => ($prescription->getRawImages()[0] ?? null),
         ]);
 
         // 2. Create Payment Record
