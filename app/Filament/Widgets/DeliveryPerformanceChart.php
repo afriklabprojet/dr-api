@@ -40,11 +40,11 @@ class DeliveryPerformanceChart extends ChartWidget
                 ->count();
             $cancelled->push($cancelledCount);
             
-            // Temps moyen de livraison (en minutes)
+            // Temps moyen de livraison (en minutes) - Compatible SQLite
             $avgDeliveryTime = Delivery::whereDate('completed_at', $date)
                 ->whereNotNull('completed_at')
                 ->whereNotNull('started_at')
-                ->selectRaw('AVG(TIMESTAMPDIFF(MINUTE, started_at, completed_at)) as avg_time')
+                ->selectRaw('AVG((julianday(completed_at) - julianday(started_at)) * 24 * 60) as avg_time')
                 ->value('avg_time') ?? 0;
             $avgTime->push(round($avgDeliveryTime));
         }
