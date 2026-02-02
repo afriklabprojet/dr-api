@@ -63,7 +63,7 @@
             <div class="max-w-7xl mx-auto px-6 lg:px-8">
                 <div class="flex justify-between items-center h-20">
                     <div class="flex items-center gap-3">
-                        <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-blue-600 to-indigo-600 flex items-center justify-center text-white font-extrabold text-lg shadow-lg shadow-blue-500/30">
+                        <div class="w-10 h-10 rounded-xl bg-linear-to-br from-blue-600 to-indigo-600 flex items-center justify-center text-white font-extrabold text-lg shadow-lg shadow-blue-500/30">
                             DR
                         </div>
                         <span class="font-bold text-xl tracking-tight text-slate-900">DR-PHARMA</span>
@@ -93,7 +93,7 @@
                         
                         <h1 class="text-5xl md:text-7xl font-extrabold tracking-tight text-slate-900 mb-8 leading-[1.1]">
                             La santé, <br/>
-                            <span class="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 via-indigo-600 to-purple-600">
+                            <span class="text-transparent bg-clip-text bg-linear-to-r from-blue-600 via-indigo-600 to-purple-600">
                                 réinventée.
                             </span>
                         </h1>
@@ -130,8 +130,8 @@
                             <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[120%] h-[120%] bg-blue-500/20 rounded-full blur-3xl animate-pulse"></div>
                             
                             <!-- Main Visual Card (App Interface Abstract) -->
-                            <div class="absolute inset-4 bg-white rounded-[2.5rem] shadow-2xl shadow-blue-900/10 border border-slate-100 overflow-hidden transform rotate-[-2deg] transition-transform hover:rotate-0 duration-500">
-                                <div class="absolute top-0 w-full h-80 bg-gradient-to-b from-blue-50/50 to-transparent"></div>
+                            <div class="absolute inset-4 bg-white rounded-[2.5rem] shadow-2xl shadow-blue-900/10 border border-slate-100 overflow-hidden transform -rotate-2 transition-transform hover:rotate-0 duration-500">
+                                <div class="absolute top-0 w-full h-80 bg-linear-to-b from-blue-50/50 to-transparent"></div>
                                 
                                 <!-- Header UI -->
                                 <div class="p-8">
@@ -182,9 +182,9 @@
                     <p class="text-lg text-slate-600">Une suite d'applications interconnectées conçues pour chaque acteur de la chaîne de santé.</p>
                 </div>
 
-                <div class="grid grid-cols-1 md:grid-cols-6 lg:grid-cols-12 gap-6 h-auto md:h-[600px]">
+                <div class="grid grid-cols-1 md:grid-cols-6 lg:grid-cols-12 gap-6 h-auto md:h-150">
                     <!-- Main Card: Client -->
-                    <div class="md:col-span-6 lg:col-span-6 bg-white rounded-[2rem] p-8 md:p-12 shadow-2xl shadow-slate-200/50 border border-slate-100 relative overflow-hidden group hover:border-blue-200 transition-colors reveal">
+                    <div class="md:col-span-6 lg:col-span-6 bg-white rounded-4xl p-8 md:p-12 shadow-2xl shadow-slate-200/50 border border-slate-100 relative overflow-hidden group hover:border-blue-200 transition-colors reveal">
                         <div class="absolute top-0 right-0 w-64 h-64 bg-blue-50 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2 group-hover:bg-blue-100 transition-colors"></div>
                         <div class="relative z-10 h-full flex flex-col justify-between">
                             <div>
@@ -206,7 +206,7 @@
 
                     <div class="md:col-span-6 lg:col-span-6 flex flex-col gap-6">
                         <!-- Secondary Card: Pharmacy -->
-                        <div class="flex-1 bg-white rounded-[2rem] p-8 shadow-xl shadow-slate-200/50 border border-slate-100 relative overflow-hidden group hover:border-emerald-200 transition-colors reveal animation-delay-200">
+                        <div class="flex-1 bg-white rounded-4xl p-8 shadow-xl shadow-slate-200/50 border border-slate-100 relative overflow-hidden group hover:border-emerald-200 transition-colors reveal animation-delay-200">
                             <div class="absolute top-0 right-0 w-32 h-32 bg-emerald-50 rounded-full blur-2xl group-hover:bg-emerald-100 transition-colors"></div>
                             <div class="flex items-start justify-between">
                                 <div>
@@ -220,7 +220,7 @@
                         </div>
 
                         <!-- Secondary Card: Courier -->
-                        <div class="flex-1 bg-white rounded-[2rem] p-8 shadow-xl shadow-slate-200/50 border border-slate-100 relative overflow-hidden group hover:border-orange-200 transition-colors reveal animation-delay-400">
+                        <div class="flex-1 bg-white rounded-4xl p-8 shadow-xl shadow-slate-200/50 border border-slate-100 relative overflow-hidden group hover:border-orange-200 transition-colors reveal animation-delay-400">
                             <div class="absolute top-0 right-0 w-32 h-32 bg-orange-50 rounded-full blur-2xl group-hover:bg-orange-100 transition-colors"></div>
                             <div class="flex items-start justify-between">
                                 <div>
@@ -240,7 +240,7 @@
         <!-- Features Matrix -->
         <section id="features" class="py-32 bg-slate-900 text-white relative overflow-hidden">
             <!-- Grid Background -->
-            <div class="absolute inset-0 bg-[linear-gradient(to_right,#1e293b_1px,transparent_1px),linear-gradient(to_bottom,#1e293b_1px,transparent_1px)] bg-[size:40px_40px] opacity-20"></div>
+            <div class="absolute inset-0 bg-[linear-gradient(to_right,#1e293b_1px,transparent_1px),linear-gradient(to_bottom,#1e293b_1px,transparent_1px)] bg-size-[40px_40px] opacity-20"></div>
             
             <div class="max-w-7xl mx-auto px-6 lg:px-8 relative z-10">
                 <div class="mb-20">
