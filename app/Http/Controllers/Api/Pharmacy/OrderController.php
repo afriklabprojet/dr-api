@@ -104,6 +104,8 @@ class OrderController extends Controller
                 'prescription_image' => $order->prescription_image,
                 'created_at' => $order->created_at,
                 'paid_at' => $order->paid_at,
+                'cancelled_at' => $order->cancelled_at,
+                'cancellation_reason' => $order->cancellation_reason,
             ],
         ]);
     }
@@ -247,6 +249,45 @@ class OrderController extends Controller
                 'waiting_info' => $waitingInfo,
                 'settings' => $this->waitingFeeService->getWaitingSettings(),
             ],
+        ]);
+    }
+
+    /**
+     * Reject order
+     */
+    public function reject(Request $request, $id)
+    {
+        $request->validate([
+            'reason' => 'nullable|string',
+        ]);
+
+        $pharmacy = $request->user()->pharmacies()->approved()->first();
+
+        if (!$pharmacy) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Aucune pharmacie approuvée trouvée',
+            ], 403);
+        }
+
+        $order = $pharmacy->orders()->findOrFail($id);
+
+        if ($order->status !== 'pending') {
+            return response()->json([
+                'success' => false,
+                'message' => 'Cette commande ne peut pas être rejetée',
+            ], 400);
+        }
+
+        $order->update([
+            'status' => 'cancelled',
+            'cancellation_reason' => $request->reason,
+            'cancelled_at' => now(),
+        ]);
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Commande rejetée avec succès',
         ]);
     }
 }

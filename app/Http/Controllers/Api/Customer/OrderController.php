@@ -342,6 +342,8 @@ class OrderController extends Controller
                 'confirmed_at' => $order->confirmed_at,
                 'paid_at' => $order->paid_at,
                 'delivered_at' => $order->delivered_at,
+                'cancelled_at' => $order->cancelled_at,
+                'cancellation_reason' => $order->cancellation_reason,
             ],
         ]);
     }
