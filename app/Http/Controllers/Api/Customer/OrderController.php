@@ -82,7 +82,9 @@ class OrderController extends Controller
             'items.*.id' => 'nullable|exists:products,id',
             'items.*.name' => 'required|string',
             'items.*.quantity' => 'required|integer|min:1',
-            'items.*.price' => 'required|numeric|min:0',
+            'items.*.price' => 'required_without:items.*.unit_price|numeric|min:0',
+            'items.*.unit_price' => 'required_without:items.*.price|numeric|min:0',
+            'items.*.total_price' => 'nullable|numeric|min:0',
             'prescription_image' => 'nullable|string',
             'prescription_id' => 'nullable|exists:prescriptions,id', // ID de la prescription uploadée via checkout
             'customer_notes' => 'nullable|string',
@@ -105,8 +107,16 @@ class OrderController extends Controller
         try {
             DB::beginTransaction();
 
+            // Normaliser les items pour accepter price ou unit_price
+            $items = collect($validated['items'])->map(function ($item) {
+                if (isset($item['unit_price']) && !isset($item['price'])) {
+                    $item['price'] = $item['unit_price'];
+                }
+                return $item;
+            })->toArray();
+
             // Validate products availability and stock
-            foreach ($validated['items'] as $item) {
+            foreach ($items as $item) {
                 if (isset($item['id'])) {
                     $product = \App\Models\Product::find($item['id']);
                     if ($product) {
@@ -132,7 +142,7 @@ class OrderController extends Controller
 
             // Calculate totals
             $subtotal = 0;
-            foreach ($validated['items'] as $item) {
+            foreach ($items as $item) {
                 $price = $item['price'];
                 if (isset($item['id'])) {
                     $product = \App\Models\Product::find($item['id']);
@@ -181,7 +191,7 @@ class OrderController extends Controller
             ]);
 
             // Create order items
-            foreach ($validated['items'] as $item) {
+            foreach ($items as $item) {
                 $price = $item['price'];
                 if (isset($item['id'])) {
                     $product = \App\Models\Product::find($item['id']);
