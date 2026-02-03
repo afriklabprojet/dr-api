@@ -62,17 +62,20 @@ class PharmacySeeder extends Seeder
                 'city' => $pharmacyData['city'],
                 'latitude' => $pharmacyData['latitude'],
                 'longitude' => $pharmacyData['longitude'],
-                'is_active' => true,
-                'is_verified' => true,
-                'commission_rate' => 0.05,
+                'status' => 'approved', // Remplace is_active et is_verified
+                'approved_at' => now(),
+                'commission_rate_platform' => 0.10,
+                'commission_rate_pharmacy' => 0.85,
+                'commission_rate_courier' => 0.05,
             ]);
 
             // Attach user to pharmacy
             $pharmacy->users()->attach($user->id);
 
-            // Create wallet
+            // Create wallet for pharmacy (polymorphic relation)
             Wallet::create([
-                'user_id' => $user->id,
+                'walletable_type' => Pharmacy::class,
+                'walletable_id' => $pharmacy->id,
                 'balance' => 0,
                 'currency' => 'XOF',
             ]);

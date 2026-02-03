@@ -11,26 +11,26 @@ class SettingsSeeder extends Seeder
     {
         $settings = [
             // Delivery settings
-            ['key' => 'delivery_base_fee', 'value' => '500', 'group' => 'delivery'],
-            ['key' => 'delivery_fee_per_km', 'value' => '100', 'group' => 'delivery'],
-            ['key' => 'delivery_max_distance_km', 'value' => '20', 'group' => 'delivery'],
-            ['key' => 'delivery_timeout_minutes', 'value' => '30', 'group' => 'delivery'],
+            ['key' => 'delivery_base_fee', 'value' => '500', 'type' => 'integer'],
+            ['key' => 'delivery_fee_per_km', 'value' => '100', 'type' => 'integer'],
+            ['key' => 'delivery_max_distance_km', 'value' => '20', 'type' => 'integer'],
+            ['key' => 'delivery_timeout_minutes', 'value' => '30', 'type' => 'integer'],
             
             // Commission settings
-            ['key' => 'platform_commission_rate', 'value' => '0.10', 'group' => 'commission'],
-            ['key' => 'pharmacy_default_commission_rate', 'value' => '0.05', 'group' => 'commission'],
-            ['key' => 'courier_commission_rate', 'value' => '0.80', 'group' => 'commission'],
+            ['key' => 'platform_commission_rate', 'value' => '0.10', 'type' => 'float'],
+            ['key' => 'pharmacy_default_commission_rate', 'value' => '0.05', 'type' => 'float'],
+            ['key' => 'courier_commission_rate', 'value' => '0.80', 'type' => 'float'],
             
             // Payment settings
-            ['key' => 'minimum_order_amount', 'value' => '1000', 'group' => 'payment'],
-            ['key' => 'minimum_withdrawal_amount', 'value' => '5000', 'group' => 'payment'],
-            ['key' => 'payment_timeout_minutes', 'value' => '15', 'group' => 'payment'],
+            ['key' => 'minimum_order_amount', 'value' => '1000', 'type' => 'integer'],
+            ['key' => 'minimum_withdrawal_amount', 'value' => '5000', 'type' => 'integer'],
+            ['key' => 'payment_timeout_minutes', 'value' => '15', 'type' => 'integer'],
             
             // App settings
-            ['key' => 'app_name', 'value' => 'DR-PHARMA', 'group' => 'app'],
-            ['key' => 'app_version', 'value' => '1.0.0', 'group' => 'app'],
-            ['key' => 'support_email', 'value' => 'support@drpharma.ci', 'group' => 'app'],
-            ['key' => 'support_phone', 'value' => '+2250700000000', 'group' => 'app'],
+            ['key' => 'app_name', 'value' => 'DR-PHARMA', 'type' => 'string'],
+            ['key' => 'app_version', 'value' => '1.0.0', 'type' => 'string'],
+            ['key' => 'support_email', 'value' => 'support@drpharma.ci', 'type' => 'string'],
+            ['key' => 'support_phone', 'value' => '+2250700000000', 'type' => 'string'],
         ];
 
         foreach ($settings as $setting) {

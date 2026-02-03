@@ -46,10 +46,11 @@ class ProductSeeder extends Seeder
                         'pharmacy_id' => $pharmacy->id,
                         'category_id' => $category->id,
                         'name' => $productData['name'],
+                        'slug' => \Illuminate\Support\Str::slug($productData['name']) . '-' . $pharmacy->id,
                         'description' => 'Description de ' . $productData['name'],
                         'price' => $productData['price'],
-                        'stock' => rand(10, 100),
-                        'is_active' => true,
+                        'stock_quantity' => rand(10, 100),
+                        'is_available' => true,
                         'requires_prescription' => str_contains($productData['name'], 'Amoxicilline'),
                     ]);
                 }

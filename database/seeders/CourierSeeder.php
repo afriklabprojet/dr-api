@@ -45,24 +45,25 @@ class CourierSeeder extends Seeder
             ]);
 
             // Create courier profile
-            Courier::create([
+            $courier = Courier::create([
                 'user_id' => $user->id,
+                'name' => $courierData['name'],
+                'phone' => $courierData['phone'],
                 'vehicle_type' => $courierData['vehicle_type'],
-                'vehicle_plate' => strtoupper(fake()->bothify('??-####-??')),
+                'vehicle_number' => strtoupper(fake()->bothify('??-####-??')),
                 'license_number' => strtoupper(fake()->bothify('CI-####-####')),
-                'is_active' => true,
-                'is_available' => true,
-                'is_verified' => true,
+                'status' => 'available',
                 'kyc_status' => 'approved',
                 'latitude' => 5.3167 + (rand(-100, 100) / 10000),
                 'longitude' => -4.0167 + (rand(-100, 100) / 10000),
                 'rating' => 4.5,
-                'total_deliveries' => rand(10, 100),
+                'completed_deliveries' => rand(10, 100),
             ]);
 
-            // Create wallet
+            // Create wallet for courier (polymorphic relation)
             Wallet::create([
-                'user_id' => $user->id,
+                'walletable_type' => Courier::class,
+                'walletable_id' => $courier->id,
                 'balance' => rand(5000, 50000),
                 'currency' => 'XOF',
             ]);
