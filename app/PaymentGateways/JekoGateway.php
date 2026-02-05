@@ -54,8 +54,10 @@ class JekoGateway implements PaymentGatewayInterface
         // Montant en centimes (JEKO attend des centimes, minimum 100)
         $amountCents = max(100, (int) ($order->total_amount * 100));
         
-        // Méthode de paiement par défaut (peut être passé dans customerData)
-        $paymentMethod = $customerData['payment_method'] ?? 'wave';
+        // Méthode de paiement - Jeko exige ce champ
+        // Options valides: 'orange', 'wave', 'mtn', 'moov', 'djamo'
+        // Par défaut on utilise 'orange' qui est disponible sur votre compte
+        $paymentMethod = $customerData['payment_method'] ?? 'orange';
 
         $payload = [
             'storeId' => $this->storeId,
@@ -65,9 +67,9 @@ class JekoGateway implements PaymentGatewayInterface
             'paymentDetails' => [
                 'type' => 'redirect',
                 'data' => [
-                    'paymentMethod' => $paymentMethod, // wave, orange, mtn, moov, djamo
                     'successUrl' => $successUrl,
                     'errorUrl' => $errorUrl,
+                    'paymentMethod' => $paymentMethod,
                 ],
             ],
         ];
@@ -294,16 +296,23 @@ class JekoGateway implements PaymentGatewayInterface
     }
 
     /**
-     * Vérifier si on est en mode sandbox (développement local)
-     * Le mode sandbox est activé quand APP_ENV=local ou APP_DEBUG=true
-     * et qu'aucune URL de retour HTTPS n'est configurée
+     * Vérifier si on est en mode sandbox (simulation)
+     * Le mode sandbox peut être contrôlé explicitement via JEKO_SANDBOX_MODE
+     * Par défaut: activé en local uniquement
      */
     protected function isSandboxMode(): bool
     {
+        // Vérifier d'abord si un mode explicite est défini
+        $explicitSandbox = config('services.jeko.sandbox_mode');
+        
+        if ($explicitSandbox !== null) {
+            return filter_var($explicitSandbox, FILTER_VALIDATE_BOOLEAN);
+        }
+        
+        // Sinon, mode sandbox automatique en environnement local
         $appEnv = config('app.env', 'production');
         $returnUrl = config('services.jeko.return_url');
         
-        // Mode sandbox si on est en local et pas d'URL HTTPS configurée
         return $appEnv === 'local' && (empty($returnUrl) || !str_starts_with($returnUrl, 'https://'));
     }
 

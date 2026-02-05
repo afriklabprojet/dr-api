@@ -38,16 +38,30 @@ class LoginController extends Controller
 
         $user = null;
         if ($fieldType === 'phone') {
-             // Normaliser le numéro pour la recherche
-             $normalizedPhone = preg_replace('/\s+/', '', $login);
-             $user = User::where(function($query) use ($normalizedPhone) {
-                 $query->where('phone', $normalizedPhone)
-                       ->orWhere('phone', '+' . ltrim($normalizedPhone, '+'))
-                       ->orWhere('phone', ltrim($normalizedPhone, '+'))
-                       // Ajouter +225 devant le numéro tel quel (ex: 0700000000 -> +2250700000000)
-                       ->orWhere('phone', '+225' . $normalizedPhone)
-                       // Aussi chercher sans le 0 initial si le numéro commence par 0
-                       ->orWhere('phone', '+225' . ltrim($normalizedPhone, '0'));
+             // Normaliser le numéro pour la recherche (suppression stricte espaces/tirets)
+             $normalizedPhone = preg_replace('/[\s\-]+/', '', $login);
+             
+             // Nettoyer le 0 initial s'il existe pour format international
+             $phoneWithoutZero = ltrim(ltrim($normalizedPhone, '+'), '0');
+             
+             // Liste des formats possibles à chercher
+             $candidates = [
+                 $normalizedPhone,                          // 0706070809
+                 '+' . ltrim($normalizedPhone, '+'),        // +0706070809
+                 ltrim($normalizedPhone, '+'),              // 0706070809 (sans + si présent)
+                 '+225' . $normalizedPhone,                 // +2250706070809
+                 '+225' . $phoneWithoutZero,                // +225706070809
+                 '225' . $phoneWithoutZero,                 // 225706070809
+             ];
+
+             // Recherche robuste ignorant les espaces dans la base de données
+             // Note: REPLACE() est supporté par SQLite, MySQL et Postgres
+             $user = User::where(function($query) use ($candidates) {
+                 foreach ($candidates as $candidate) {
+                     $query->orWhereRaw("REPLACE(phone, ' ', '') = ?", [$candidate]);
+                 }
+                 // Fallback pour compatibilité exacte
+                 $query->orWhereIn('phone', $candidates);
              })->first();
         } else {
              $user = User::where('email', $login)->first();

@@ -34,3 +34,9 @@ Artisan::command('deliveries:check-timeouts', function () {
     
     $this->info('Job dispatched.');
 })->purpose('Vérifier et annuler les livraisons en attente trop longtemps');
+
+// ========================================
+// ASSIGNATION AUTOMATIQUE DES LIVRAISONS
+// ========================================
+// Exécuter l'auto-assignation toutes les minutes (sans intervention humaine)
+Schedule::command('deliveries:auto-assign')->everyMinute();

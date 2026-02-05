@@ -2,8 +2,10 @@
 
 namespace App\Providers;
 
+use App\Models\Delivery;
 use App\Models\Order;
 use App\Models\Product;
+use App\Observers\DeliveryObserver;
 use App\Observers\OrderObserver;
 use App\Observers\ProductObserver;
 use Illuminate\Support\ServiceProvider;
@@ -43,6 +45,7 @@ class AppServiceProvider extends ServiceProvider
         // Register Observers
         Order::observe(OrderObserver::class);
         Product::observe(ProductObserver::class);
+        Delivery::observe(DeliveryObserver::class); // Auto-assignation automatique
 
         // Register Event Listeners
         Event::listen(
