@@ -11,26 +11,35 @@ class UserSeeder extends Seeder
     public function run(): void
     {
         // Admin user
-        User::factory()->create([
-            'name' => 'Admin DR-PHARMA',
-            'email' => 'admin@drpharma.ci',
-            'phone' => '+2250700000000',
-            'password' => Hash::make('password'),
-            'role' => 'admin',
-            'email_verified_at' => now(),
-        ]);
+        User::firstOrCreate(
+            ['phone' => '+2250700000000'],
+            [
+                'name' => 'Admin DR-PHARMA',
+                'email' => 'admin@drpharma.ci',
+                'password' => Hash::make('password'),
+                'role' => 'admin',
+                'email_verified_at' => now(),
+                'phone_verified_at' => now(),
+            ]
+        );
 
         // Test customer
-        User::factory()->create([
-            'name' => 'Client Test',
-            'email' => 'client@drpharma.ci',
-            'phone' => '+2250700000001',
-            'password' => Hash::make('password'),
-            'role' => 'customer',
-            'email_verified_at' => now(),
-        ]);
+        User::firstOrCreate(
+            ['phone' => '+2250700000001'],
+            [
+                'name' => 'Client Test',
+                'email' => 'client@drpharma.ci',
+                'password' => Hash::make('password'),
+                'role' => 'customer',
+                'email_verified_at' => now(),
+                'phone_verified_at' => now(),
+            ]
+        );
 
-        // Additional test users
-        User::factory(5)->customer()->create();
+        // Additional test users (only if we have less than 7 customers)
+        $existingCustomers = User::where('role', 'customer')->count();
+        if ($existingCustomers < 6) {
+            User::factory(6 - $existingCustomers)->customer()->create();
+        }
     }
 }
